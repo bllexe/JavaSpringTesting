@@ -4,6 +4,8 @@ import net.tigrisTesting.model.Employee;
 
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,16 @@ class EmployeeRepositoryTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+    private Employee employee;
+
+    @BeforeEach
+    public void setup(){
+    employee = Employee.builder()
+            .firstName("bilal")
+            .lastName("yakut")
+            .email("bilalykt@mail.com")
+            .build();
+    }
 
     //JUnit test for save employee operation
 
@@ -25,11 +37,11 @@ class EmployeeRepositoryTest {
     public void givenEmployeeObject_whenSave_thenReturnSavedEmployee() {
 
         //given - precondition or setup
-        Employee employee = Employee.builder()
+       /* Employee employee = Employee.builder()
                 .firstName("bilal")
                 .lastName("yakut")
                 .email("bilalykt@mail.com")
-                .build();
+                .build();*/
 
         //when -action or the behavior that we are going test
 
@@ -82,12 +94,6 @@ class EmployeeRepositoryTest {
     @DisplayName("Get Employee By Id operation")
     public void givenEmployeeObject_whenFindEmployeeById_thenReturnEmployeeObject() {
         //given --precondition operation
-
-        Employee employee = Employee.builder()
-                .firstName("bilal")
-                .lastName("yakut")
-                .email("bilal@mail.com")
-                .build();
         employeeRepository.save(employee);
 
         //when --action that we are going test
@@ -105,11 +111,6 @@ class EmployeeRepositoryTest {
     public void givenEmployeeMail_whenFindEmployeeByEmail_thenEmployeeObject() {
         //given --precondition operation
 
-        Employee employee = Employee.builder()
-                .firstName("jennifer")
-                .lastName("jennifer")
-                .email("jennifer@mail.com")
-                .build();
         employeeRepository.save(employee);
 
         //when --action that we are going test
@@ -124,11 +125,6 @@ class EmployeeRepositoryTest {
     @DisplayName("update Employee with by id operation")
     public void givenEmployeeObject_whenUpdateEmployee_thenReturnEmployeeObject() {
         //given --precondition operation
-        Employee employee = Employee.builder()
-                .firstName("bilal")
-                .lastName("yakut")
-                .email("bilal@mail.com")
-                .build();
         employeeRepository.save(employee);
 
         //when --action that we are going test
@@ -152,21 +148,84 @@ class EmployeeRepositoryTest {
     @DisplayName("delete employee operation")
     public void givenEmployeeObject_whenDeleteEmployee_thenRemoveEmployee() {
         //given --precondition operation
-        Employee employee = Employee.builder()
-                .firstName("bilal")
-                .lastName("yakut")
-                .email("bilal@mail.com")
-                .build();
         employeeRepository.save(employee);
-
 
         //when --action that we are going test
         //employeeRepository.deleteById(employee.getId());
         employeeRepository.delete(employee);
-        Optional<Employee> optionalEmployee= employeeRepository.findById(employee.getId());
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employee.getId());
 
         //then verify the output
         assertThat(optionalEmployee).isEmpty();
     }
 
+
+    //test for custom query jpql get employee custom query with index
+    @Test
+    @DisplayName("Find Employee by firstName and lastName")
+    public void givenFirstNameAndLastName_whenFindEmployeeJPQL_thenReturnEmployeeObject() {
+        //given --precondition operation
+        employeeRepository.save(employee);
+        String firstName="bilal";
+        String lastName="yakut";
+
+        //when --action that we are going test
+        Employee employeeDb = employeeRepository.findByJPQL(firstName, lastName);
+
+        //then verify the output
+        assertThat(employeeDb).isNotNull();
+
+    }
+
+    //test for custom query jpql get employee custom query with name params
+    @Test
+    @DisplayName("Find Employee by firstName and lastName with params")
+    public void givenFirstNameAndLastName_whenFindEmployeeJPQLParams_thenReturnEmployeeObject() {
+        //given --precondition operation
+        employeeRepository.save(employee);
+        String firstName="bilal";
+        String lastName="yakut";
+
+        //when --action that we are going test
+        Employee employeeDb = employeeRepository.findByJPQLParams(firstName, lastName);
+
+        //then verify the output
+        assertThat(employeeDb).isNotNull();
+
+    }
+
+
+    //test for custom native query get employee ,custom query with index params
+    @Test
+    @DisplayName("Find Employee by firstName and lastName ")
+    public void givenFirstNameAndLastName_whenFindEmployeeNativeIndexSQL_thenReturnEmployeeObject() {
+        //given --precondition operation
+        employeeRepository.save(employee);
+        String firstName="bilal";
+        String lastName="yakut";
+
+        //when --action that we are going test
+        Employee employeeDb = employeeRepository.findByNativeSql(firstName, lastName);
+
+        //then verify the output
+        assertThat(employeeDb).isNotNull();
+
+    }
+
+    //test for custom native query get employee ,custom query with named params
+    @Test
+    @DisplayName("Find Employee by firstName and lastName ")
+    public void givenFirstNameAndLastName_whenFindEmployeeNativeNamedSQL_thenReturnEmployeeObject() {
+        //given --precondition operation
+        employeeRepository.save(employee);
+        String firstName="bilal";
+        String lastName="yakut";
+
+        //when --action that we are going test
+        Employee employeeDb = employeeRepository.findByNativeNamedParams(firstName, lastName);
+
+        //then verify the output
+        assertThat(employeeDb).isNotNull();
+
+    }
 }
