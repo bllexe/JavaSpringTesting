@@ -2,7 +2,6 @@ package net.tigrisTesting.repository;
 
 import net.tigrisTesting.model.Employee;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
