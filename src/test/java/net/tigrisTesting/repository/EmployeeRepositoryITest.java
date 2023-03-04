@@ -1,5 +1,6 @@
 package net.tigrisTesting.repository;
 
+import net.tigrisTesting.integration.AbstractContainerBaseTest;
 import net.tigrisTesting.model.Employee;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class EmployeeRepositoryITest {
+class EmployeeRepositoryITest extends AbstractContainerBaseTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;

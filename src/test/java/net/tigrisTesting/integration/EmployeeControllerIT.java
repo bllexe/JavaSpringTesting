@@ -3,7 +3,6 @@ package net.tigrisTesting.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.tigrisTesting.model.Employee;
 import net.tigrisTesting.repository.EmployeeRepository;
-import static org.hamcrest.CoreMatchers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,7 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class EmployeeConrollerITest {
+@Testcontainers
+public class EmployeeControllerIT extends AbstractContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,6 +43,7 @@ public class EmployeeConrollerITest {
 
     @Test
     public void givenEmployeeObject_whenEmployeeCreate_thenReturnEmployeeObject() throws Exception {
+
         //given --precondition operation
         Employee employee = Employee.builder()
                 .firstName("bilal")
